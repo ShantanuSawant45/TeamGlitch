@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "634464349649",
+    "project_id": "prospect-74092",
+    "storage_bucket": "prospect-74092.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634464349649:android:997d30924fa572b3bc04f0",
+        "android_client_info": {
+          "package_name": "com.ex.pr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDtO5E4vinocZfh-aTR1O21EqspXWDQWHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
