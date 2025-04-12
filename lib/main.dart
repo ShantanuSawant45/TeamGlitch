@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:prospekt/auth_pages/login_screen.dart';
+import 'package:prospekt/screens/home_screen.dart';
 import 'screens/splash_screen.dart';
 import 'screens/onboarding_screen.dart';
 
@@ -48,25 +50,20 @@ class MyApp extends StatelessWidget {
         future: _checkAuthState(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Show a loading indicator while checking auth state
             return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),
             );
           } else if (snapshot.hasError) {
-            // Handle errors during auth state check
             print("Error checking auth state: ${snapshot.error}");
-            // Return the onboarding screen in case of error
             return const SplashScreen(nextScreen: OnboardingScreen());
           } else {
             final User? user = snapshot.data as User?;
-
             // If user is already signed in, go directly to home screen
-            // if (user != null) {
-            //   return const HomeScreen();
-            // }
-
+            if (user != null) {
+              return const HomeScreen();
+            }
             // Otherwise, start with the splash and onboarding flow
             return const SplashScreen(nextScreen: OnboardingScreen());
           }

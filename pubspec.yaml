@@ -38,8 +38,8 @@ dependencies:
   lottie: ^2.7.0
   smooth_page_indicator: ^1.1.0
   google_fonts: ^5.1.0
-  firebase_core: ^2.15.1
-  firebase_auth: ^4.7.3
+  firebase_core: ^3.13.0
+  firebase_auth: ^5.5.2
   simple_animations: ^5.0.2
   file_picker: ^5.3.3
   http: ^1.1.0

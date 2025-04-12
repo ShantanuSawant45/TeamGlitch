@@ -31,71 +31,64 @@ class _LoginScreenState extends State<LoginScreen> {
 
   // Login with email and password
   Future<void> _signInWithEmailAndPassword() async {
-    // if (_formKey.currentState!.validate()) {
-    //   setState(() {
-    //     _isLoading = true;
-    //   });
-    //
-    //   try {
-    //     // Add additional error handling and logging
-    //     print(
-    //         "Attempting to sign in with email: ${_emailController.text.trim()}");
-    //
-    //     final userCredential = await _auth.signInWithEmailAndPassword(
-    //       email: _emailController.text.trim(),
-    //       password: _passwordController.text.trim(),
-    //     );
-    //
-    //     // Check if user is actually returned
-    //     if (userCredential.user == null) {
-    //       throw Exception("User is null after authentication");
-    //     }
-    //
-    //     print("Successfully signed in user: ${userCredential.user!.uid}");
-    //
-    //     // Navigate to Home Screen after successful login
-    //     if (mounted) {
-    //       Navigator.pushReplacement(
-    //           context,
-    //           MaterialPageRoute(
-    //             builder: (context) => const HomeScreen(),
-    //           ));
-    //     }
-    //   } on FirebaseAuthException catch (e) {
-    //     String errorMessage = "An error occurred during login";
-    //
-    //     if (e.code == 'user-not-found') {
-    //       errorMessage = "No user found with this email";
-    //     } else if (e.code == 'wrong-password') {
-    //       errorMessage = "Incorrect password";
-    //     } else if (e.code == 'invalid-credential') {
-    //       errorMessage = "Invalid credentials";
-    //     } else if (e.code == 'user-disabled') {
-    //       errorMessage = "This account has been disabled";
-    //     }
-    //
-    //     print("Firebase Auth Exception: ${e.code} - ${e.message}");
-    //     _showErrorSnackBar(errorMessage);
-    //   } catch (e) {
-    //     print("Unexpected error during login: $e");
-    //
-    //     // Add special handling for the Pigeon/type cast error
-    //     if (e.toString().contains("Pigeon") ||
-    //         e.toString().contains("is not a subtype")) {
-    //       _showErrorSnackBar(
-    //           "Authentication error: Please update the app or contact support");
-    //     } else {
-    //       _showErrorSnackBar("Failed to login: ${e.toString()}");
-    //     }
-    //   } finally {
-    //     if (mounted) {
-    //       setState(() {
-    //         _isLoading = false;
-    //       });
-    //     }
-    //   }
-    // }
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      try {
+        final userCredential = await _auth.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        );
+
+
+
+        print("Successfully signed in user: ${userCredential.user!.uid}");
+
+        // Navigate to Home Screen after successful login
+        if (mounted) {
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ));
+        }
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = "An error occurred during login";
+
+        if (e.code == 'user-not-found') {
+          errorMessage = "No user found with this email";
+        } else if (e.code == 'wrong-password') {
+          errorMessage = "Incorrect password";
+        } else if (e.code == 'invalid-credential') {
+          errorMessage = "Invalid credentials";
+        } else if (e.code == 'user-disabled') {
+          errorMessage = "This account has been disabled";
+        }
+
+        print("Firebase Auth Exception: ${e.code} - ${e.message}");
+        _showErrorSnackBar(errorMessage);
+      } catch (e) {
+        print("Unexpected error during login: $e");
+
+        // Add special handling for the Pigeon/type cast error
+        if (e.toString().contains("Pigeon") ||
+            e.toString().contains("is not a subtype")) {
+          _showErrorSnackBar(
+              "Authentication error: Please update the app or contact support");
+        } else {
+          _showErrorSnackBar("Failed to login: ${e.toString()}");
+        }
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
+      }
+    }
+    // Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeScreen()));
   }
 
   void _showErrorSnackBar(String message) {

@@ -20,8 +20,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
   // Firebase Auth instance
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -43,61 +42,20 @@ class _SignupScreenState extends State<SignupScreen> {
       });
 
       try {
-        // Add additional error handling and logging
-        print(
-            "Attempting to register with email: ${_emailController.text.trim()}");
-
-        // Create user with email and password
-        final UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
+        final UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         );
 
-        // Check if user is actually returned
-        if (userCredential.user == null) {
-          throw Exception("User is null after registration");
-        }
+        await userCredential.user?.updateDisplayName(_nameController.text.trim());
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
 
-        // Update display name
-        await userCredential.user!
-            .updateDisplayName(_nameController.text.trim());
-
-        print("Successfully registered user: ${userCredential.user!.uid}");
-
-        // Navigate to Home Screen after successful signup
-        if (mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
-            ),
-          );
-        }
       } on FirebaseAuthException catch (e) {
-        String errorMessage = "An error occurred during signup";
+        print(e);
 
-        if (e.code == 'email-already-in-use') {
-          errorMessage = "This email is already in use";
-        } else if (e.code == 'weak-password') {
-          errorMessage = "The password is too weak";
-        } else if (e.code == 'invalid-email') {
-          errorMessage = "The email address is invalid";
-        }
-
-        print("Firebase Auth Exception: ${e.code} - ${e.message}");
-        _showErrorSnackBar(errorMessage);
-      } catch (e) {
-        print("Unexpected error during signup: $e");
-
-        // Add special handling for the Pigeon/type cast error
-        if (e.toString().contains("Pigeon") ||
-            e.toString().contains("is not a subtype")) {
-          _showErrorSnackBar(
-              "Authentication error: Please update the app or contact support");
-        } else {
-          _showErrorSnackBar("Failed to register: ${e.toString()}");
-        }
       } finally {
         if (mounted) {
           setState(() {
@@ -107,13 +65,11 @@ class _SignupScreenState extends State<SignupScreen> {
       }
     } else if (!_acceptTerms) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Please accept the Terms and Conditions"),
-          backgroundColor: Color(0xFF5D3A72),
-        ),
+        const SnackBar(content: Text("Please accept the Terms and Conditions")),
       );
     }
   }
+
 
   void _showErrorSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
